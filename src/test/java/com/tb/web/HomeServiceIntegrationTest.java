@@ -49,11 +49,20 @@ public class HomeServiceIntegrationTest {
     public void getSecuredWelcomeMessage() throws Exception {
         String expected = "Hello secured";
 
-        ResponseEntity<String> response = template.exchange(
+        /**
+         * It has to result with 401 without authorization header
+         */
+        ResponseEntity<String> responseWithoutHeader = template.exchange(
+                createUrlWithRandomPort("/home/secured"), HttpMethod.GET, new HttpEntity<>(null, null), String.class);
+        Assert.assertEquals(HttpStatus.UNAUTHORIZED, responseWithoutHeader.getStatusCode());
+        /**
+         * It has to result with 200 with authorization header
+         */
+        ResponseEntity<String> responseWithHeader = template.exchange(
                 createUrlWithRandomPort("/home/secured"), HttpMethod.GET, new HttpEntity<>(null, headers), String.class);
+        Assert.assertEquals(HttpStatus.OK, responseWithHeader.getStatusCode());
 
-        Assert.assertEquals(expected, response.getBody().toString());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(expected, responseWithHeader.getBody().toString());
     }
 
 
