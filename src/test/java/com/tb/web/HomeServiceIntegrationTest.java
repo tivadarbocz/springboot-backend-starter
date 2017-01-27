@@ -28,7 +28,7 @@ public class HomeServiceIntegrationTest {
 
     @Before
     public void setupJSONAcceptType() {
-        headers.add("Authorization", createAuthenticationHeaderValue("user", "user"));
+        headers.add("Authorization", createBasicAuthenticationHeaderValue("user", "user"));
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
     }
 
@@ -70,12 +70,12 @@ public class HomeServiceIntegrationTest {
         return "http://localhost:" + port + uri;
     }
 
-    private String createAuthenticationHeaderValue(String userName, String password) {
-        //"Authorization", "Basic " + Base64Encoding(userName" : "password)
+    private String createBasicAuthenticationHeaderValue(String userName, String password) {
+        //Authorization:Basic Base64Encoding(userName:password)
         String auth = userName + ":" + password;
-        byte[] encodeAuth = Base64.encode(auth.getBytes(Charset.forName("US-ASCII")));
-        String headerValue = "Basic " + new String(encodeAuth);
+        byte[] encodedAuth = Base64.encode(auth.getBytes(Charset.forName("US-ASCII")));
+        String basicHeaderValue = "Basic " + new String(encodedAuth);
 
-        return headerValue;
+        return basicHeaderValue;
     }
 }
