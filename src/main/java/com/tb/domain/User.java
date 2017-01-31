@@ -1,5 +1,7 @@
 package com.tb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -20,6 +22,11 @@ public class User {
     private String createdBy;*/
 
     public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public User(String username, String password, Boolean disabled) {
@@ -50,6 +57,7 @@ public class User {
     }
 
     @Basic
+    @JsonIgnore
     @Column(name = "password", nullable = true, insertable = true, updatable = true, length = 255)
     public String getPassword() {
         return password;
@@ -133,7 +141,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", disabled=" + disabled +
                 '}';
     }
